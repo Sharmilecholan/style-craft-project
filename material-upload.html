@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Upload - Style Craft</title>
+    <style>
+        body {
+            font-family: Lora, serif;
+            background: url('pic.avif') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: url('pinkk.avif') no-repeat center center/cover;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+        .video-container {
+            position: center;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            display:flex;
+        }
+        video {
+            width: 95%;
+            border-radius: 10px;
+            justify-content: center;
+            align-items: center;
+            display:flex;
+        }
+        .text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #6F1D1B; 
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: cursive;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .hidden {
+            opacity: 0;
+        }
+        .upload-text {
+            margin-top: 1rem;
+            font-family: Lora, serif;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #6F1D1B; 
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-label {
+            background-color: #F98866; 
+            font-family: Lora, serif;
+            color: #FFF;
+            padding: 0.75rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 1rem 0;
+            display: inline-block;
+        }
+        .upload-label:hover {
+            background-color: #6F1D1B; 
+            opacity: 0.7;
+        }
+        .upload-label:active {
+            opacity: 0.5;
+        }
+        .upload-box {
+            width: 100%;
+            height: 150px;
+            border: 2px dashed #BB9457; 
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        img {
+            display: none;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #FFE6A7; 
+            border-radius: 5px;
+            overflow: hidden;
+            display: none;
+            margin-top: 1rem;
+            font-family: Lora, serif;
+        }
+        .progress-bar div {
+            height: 1rem;
+            width: 0;
+            background-color: #6F1D1B; 
+            transition: width 0.3s;
+        }
+        button {
+            background-color: #F98866; 
+            color: #FFF;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 1rem 0;
+            font-family: Lora, serif;
+        }
+        button:hover {
+            background-color: #6F1D1B; 
+            opacity: 0.7;
+        }
+        button:active {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-container">
+            <video id="promo-video" src="stvedio.mp4" autoplay muted loop>
+                Your browser does not support the video tag.
+            </video>
+            <div class="text-overlay" id="text1"></div>
+            <div class="text-overlay hidden" id="text2"></div>
+            <div class="text-overlay hidden" id="text3"></div>
+            <div class="text-overlay hidden" id="text4"></div>
+            <div class="text-overlay hidden" id="text5"></div>
+        </div>
+        <div class="upload-text">Upload the Material</div>
+        <label for="file-upload" class="upload-label">Choose File</label>
+        <input type="file" id="file-upload" accept="image/*">
+        <div class="upload-box">
+            <img id="preview" alt="Preview">
+        </div>
+        <div class="progress-bar">
+            <div></div>
+        </div>
+        <button id="upload-button" onclick="uploadFile()">Submit</button>
+    </div>
+    <script>
+        const fileUpload = document.getElementById('file-upload');
+        const preview = document.getElementById('preview');
+        const progressBar = document.querySelector('.progress-bar');
+        const progress = progressBar.querySelector('div');
+
+        const text1 = document.getElementById('text1');
+        const text2 = document.getElementById('text2');
+        const text3 = document.getElementById('text3');
+        const text4 = document.getElementById('text4');
+        const text5 = document.getElementById('text5');
+
+        setTimeout(() => {
+            text1.classList.add('hidden');
+            text2.classList.remove('hidden');
+        }, 3000); // Change text after 3 seconds
+
+        setTimeout(() => {
+            text2.classList.add('hidden');
+            text3.classList.remove('hidden');
+        }, 6000); // Change text after another 3 seconds
+
+        setTimeout(() => {
+            text3.classList.add('hidden');
+            text4.classList.remove('hidden');
+        }, 9000); // Change text after another 3 seconds
+
+        setTimeout(() => {
+            text4.classList.add('hidden');
+            text5.classList.remove('hidden');
+        }, 12000); // Change text after another 3 seconds
+
+        fileUpload.addEventListener('change', () => {
+            const file = fileUpload.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const maxW = 300; // Set max width
+                        const scale = maxW / img.width;
+                        canvas.width = maxW;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        preview.src = canvas.toDataURL();
+                        preview.style.display = 'block';
+
+                        // Save the image data URL to localStorage
+                        localStorage.setItem('uploadedMaterial', canvas.toDataURL());
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function uploadFile() {
+            // This function can be filled in with the actual upload logic
+            window.location.href = 'dress-visualize-page.html'; // Redirect to visualize dress page
+        }
+    </script>
+</body>
+</html>

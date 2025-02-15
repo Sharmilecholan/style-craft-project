@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Sign-Up - Style Craft</title>
+    <style>
+        body {
+            font-family: Lora, serif;
+            background: url('pic.avif') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: url('pinkk.avif') no-repeat center center/cover;
+            padding: 1.35rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1.0rem;
+            color: #432818;
+            font-family: 'Playfair Display', serif;
+        }
+        .form-group {
+            margin-bottom: 1.0rem;
+            width: 100%;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #432818;
+        }
+        .form-group input {
+            width: 95%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: Lora, serif;
+        }
+        .form-group .password-container {
+            position: relative;
+            width: 95%;
+        }
+        .form-group .password-container input {
+            width: calc(102% - 2rem);
+            padding-right: 2rem;
+        }
+        .form-group .password-container .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 0.5rem;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #F98866;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            color: white;
+            font-family: Lora, serif;
+        }
+        .form-group button:hover {
+            background: linear-gradient(to right, #F98866, #ffbfa0);
+        }
+        .form-group button:active {
+            background-color: #c76750;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Customer Sign-Up</h2>
+        <form>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="DOB">DOB</label>
+                <input type="date" id="DOB" name="DOB" required>
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required>
+                    <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+            <a href='customer-login.html'>Already have an account? Login</a>
+        </form>
+    </div>
+    
+    <script>
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+    
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent form from reloading the page
+            
+            // Collect form data
+            const name = document.getElementById('name').value;
+            const DOB = document.getElementById('DOB').value;
+            const mobileNumber = document.getElementById('mobile').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+    
+            // Send POST request to the Flask backend
+            fetch('http://localhost:5000/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    DOB: DOB,
+                    mobile_number: mobileNumber,
+                    email: email,
+                    password: password
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Registration failed.');
+                }
+            })
+            .then(data => {
+                alert(data.message);
+                // Redirect to login page on successful registration
+                window.location.href = "customer-login.html";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Registration failed. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

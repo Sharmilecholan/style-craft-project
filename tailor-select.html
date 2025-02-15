@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Tailor - StyleCraft</title>
+    <style>
+        body {
+            font-family: Lora,serif;
+            background: url('pic.avif') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .filter-icon {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        .search-container input[type="text"] {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-button {
+            background-color: #F98866;
+            color: #FFF;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            opacity: 0.8;
+        }
+        .tailor {
+            background-color: #FFFFFF;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .tailor h3 {
+            color: #6F1D1B;
+        }
+        .price-range, .rating, .address {
+            margin-top: 5px;
+            color: #432818;
+        }
+        .rating span {
+            color: gold;
+        }
+        .select-button {
+            background-color: #F98866;
+            color: #FFF;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .select-button:hover {
+            opacity: 0.8;
+        }
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            transition: all 0.3s;
+            padding: 20px;
+            z-index: 999;
+        }
+        .sidebar.active {
+            left: 0;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+        .overlay.active {
+            display: block;
+        }
+        .sidebar h3 {
+            margin-top: 0;
+        }
+        .close-sidebar {
+            cursor: pointer;
+            font-size: 1.2rem;
+            float: right;
+        }
+        .sidebar label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .sidebar input[type="checkbox"],
+        .sidebar input[type="range"] {
+            margin-right: 10px;
+        }
+        .sidebar button {
+    position: sticky;
+    bottom: 20px;
+    width: calc(100% - 40px); /* Full width minus padding */
+    margin-top: 20px;
+}
+
+        .sidebar button {
+            background-color: #F98866;
+            color: #FFF;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .sidebar button:hover {
+            opacity: 0.8;
+        }
+        @media (max-height: 600px) {
+    .sidebar {
+        height: 100%;
+        overflow-y: auto;
+    }
+    .sidebar {
+    padding: 10px;
+}
+.sidebar label {
+    margin-bottom: 5px;
+}
+
+    .sidebar button {
+        position: static;
+        width: 100%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    
+    <div class="container">
+        <div class="search-container">
+            <span class="filter-icon" onclick="toggleSidebar()">&#9776;</span>
+            <input type="text" id="search-input" placeholder="Search tailors..." oninput="filterTailors()">
+            <button class="search-button">Search</button>
+        </div>
+        <div id="tailor-list">
+            <!-- Tailor divs will be appended here by JavaScript -->
+        </div>
+    </div>
+
+    <div class="sidebar" id="filter-sidebar">
+        <span class="close-sidebar" onclick="toggleSidebar()">&#10005;</span>
+        <h3>Filters</h3>
+        <h4>Location</h4>
+        <label><input type="checkbox"> Chennai</label>
+        <label><input type="checkbox"> Bangalore</label>
+        <label><input type="checkbox"> Mumbai</label>
+
+        <h4>Price Range (<span id="price-value">500</span>)</h4>
+        <input type="range" min="500" max="2000" step="100" id="price-range" oninput="updatePriceValue()">
+
+        <h4>Services Offered</h4>
+        <label><input type="checkbox"> Custom Tailoring</label>
+        <label><input type="checkbox"> Alterations</label>
+        <label><input type="checkbox"> Embroidery</label>
+
+        <h4>Ratings</h4>
+        <label><input type="checkbox"> 4 & above</label>
+        <label><input type="checkbox"> 3 & above</label>
+        <label><input type="checkbox"> 2 & above</label>
+
+        <h4>Years of Experience</h4>
+        <label><input type="checkbox"> 1-3 years</label>
+        <label><input type="checkbox"> 3-5 years</label>
+        <label><input type="checkbox"> 5+ years</label>
+
+        <button onclick="applyFilters()">Apply Filters</button>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('filter-sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        const tailorList = [
+            { name: "Arjun Sharma", address: "Chennai", priceRange: "₹500 - ₹1000", rating: 4 },
+            { name: "Priya Singh", address: "Bangalore", priceRange: "₹800 - ₹1500", rating: 5 },
+            { name: "Ravi Kumar", address: "Mumbai", priceRange: "₹600 - ₹1200", rating: 3 },
+            { name: "Anita Patel", address: "Gujarat, Ahmedabad, Vastrapur", priceRange: "₹700 - ₹1300", rating: 4 },
+            { name: "Vikram Joshi", address: "Delhi, New Delhi, Connaught Place", priceRange: "₹500 - ₹1100", rating: 2 },
+            { name: "Sunita Reddy", address: "Telangana, Hyderabad, Banjara Hills", priceRange: "₹750 - ₹1400", rating: 5 },
+            { name: "Manoj Verma", address: "Uttar Pradesh, Lucknow, Gomti Nagar", priceRange: "₹650 - ₹1250", rating: 4 },
+            { name: "Pooja Gupta", address: "West Bengal, Kolkata, Park Street", priceRange: "₹900 - ₹1600", rating: 5 },
+            { name: "Rajesh Mehta", address: "Rajasthan, Jaipur, C-Scheme", priceRange: "₹550 - ₹1050", rating: 3 },
+            { name: "Kavita Yadav", address: "Haryana, Gurgaon, DLF Phase 4", priceRange: "₹800 - ₹1500", rating: 4 },
+            { name: "Ajay Deshmukh", address: "Madhya Pradesh, Indore, Vijay Nagar", priceRange: "₹700 - ₹1300", rating: 2 },
+            { name: "Renu Agarwal", address: "Punjab, Chandigarh, Sector 17", priceRange: "₹950 - ₹1700", rating: 5 },
+            { name: "Suresh Bansal", address: "Bihar, Patna, Fraser Road", priceRange: "₹600 - ₹1200", rating: 3 },
+            { name: "Neha Kapoor", address: "Kerala, Kochi, Marine Drive", priceRange: "₹850 - ₹1550", rating: 4 },
+            { name: "Vishal Saxena", address: "Assam, Guwahati, Paltan Bazar", priceRange: "₹500 - ₹1000", rating: 2 }
+        ];
+
+        const tailorListContainer = document.getElementById('tailor-list');
+
+        function displayTailors(tailors) {
+    tailorListContainer.innerHTML = '';
+    tailors.forEach(tailor => {
+        const tailorDiv = document.createElement('div');
+        tailorDiv.className = 'tailor';
+        tailorDiv.innerHTML = `
+            <h3>${tailor.name}</h3>
+            <div class="address">Address: ${tailor.address}</div>
+            <div class="price-range">Price Range: ${tailor.priceRange}</div>
+            <div class="rating">Rating: <span>${'★'.repeat(tailor.rating)}</span></div>
+            <button class="select-button" onclick="selectTailor('${tailor.name}')">Select</button>
+        `;
+        tailorListContainer.appendChild(tailorDiv);
+    });
+}
+
+function selectTailor(tailorName) {
+    alert(`You have selected ${tailorName}`);
+    // Here you can add logic to proceed with the next step after selecting the tailor
+    window.location.href = 'chat-page.html';
+}
+
+
+        function filterTailors() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            const filteredTailors = tailorList.filter(tailor => 
+                tailor.name.toLowerCase().includes(searchInput)
+            );
+            displayTailors(filteredTailors);
+        }
+
+        displayTailors(tailorList);
+
+        function applyFilters() {
+    let filteredTailors = [...tailorList];
+    function selectTailor(tailorName) {
+            alert(`Tailor ${tailorName} selected!`);
+            // Redirect to the next page with the selected tailor name
+            window.location.href = `chat-page.html?tailor=${tailorName}`;
+        }
+
+    // Location Filter
+    const locationCheckboxes = document.querySelectorAll('.sidebar input[type="checkbox"]:not(:checked)');
+    const selectedLocations = Array.from(locationCheckboxes).map(checkbox => checkbox.parentElement.textContent.trim());
+    if (selectedLocations.length > 0) {
+        filteredTailors = filteredTailors.filter(tailor => selectedLocations.some(loc => tailor.address.includes(loc)));
+    }
+
+    // Price Range Filter
+    const maxPrice = parseInt(document.getElementById('price-range').value);
+    filteredTailors = filteredTailors.filter(tailor => {
+        const priceRange = tailor.priceRange.match(/\d+/g).map(Number); // Extracts numbers from priceRange string
+        return priceRange[0] <= maxPrice;
+    });
+
+    // Rating Filter
+    const ratingCheckboxes = document.querySelectorAll('.sidebar input[type="checkbox"]:checked');
+    const selectedRatings = Array.from(ratingCheckboxes)
+        .map(checkbox => checkbox.parentElement.textContent.trim())
+        .filter(text => text.includes('& above'))
+        .map(text => parseInt(text.charAt(0)));
+
+    if (selectedRatings.length > 0) {
+        filteredTailors = filteredTailors.filter(tailor => selectedRatings.some(rating => tailor.rating >= rating));
+    }
+// scripts.js
+function selectTailor(tailorId) {
+    const confirmation = confirm('Are you sure you want to select this tailor?');
+    if (confirmation) {
+        // Save selected tailor's ID in local storage
+        localStorage.setItem('selectedTailor', tailorId);
+
+        // Redirect to chat page
+        window.location.href = 'chat-page.html';
+    }
+}
+
+    displayTailors(filteredTailors);
+}
+
+function updatePriceValue() {
+    const priceValue = document.getElementById('price-range').value;
+    document.getElementById('price-value').textContent = priceValue;
+}
+
+// Display all tailors on page load
+displayTailors(tailorList);
+
+    </script>
+</body>
+</html>

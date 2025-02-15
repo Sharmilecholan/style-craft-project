@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measurements - Style Craft</title>
+    <style>
+        body {
+            font-family: Lora, serif;
+            background: url('pic.avif') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+          background: url('pinkk.avif') no-repeat center center/cover;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            font-family: Lora, serif;
+        }
+        h2 {
+            margin-bottom: 15px;
+            font-family: Lora, serif;
+        }
+        label {
+            display: block;
+            text-align: left;
+            margin: 10px 0 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        button {
+            background-color: #F98866;
+            font-family: Lora, serif;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            flex: 1;
+            margin: 0 5px;
+        }
+        button:hover {
+            background-color: #6F1D1B;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Measurements</h2>
+    <button onclick="loadSavedMeasurements()">Use Saved Measurements</button>
+
+    <form id="measurement-form">
+        <label for="chest">Chest (in inches):</label>
+        <input type="number" id="chest" name="chest" placeholder="Enter chest size">
+
+        <label for="waist">Waist (in inches):</label>
+        <input type="number" id="waist" name="waist" placeholder="Enter waist size">
+
+        <label for="hips">Hips (in inches):</label>
+        <input type="number" id="hips" name="hips" placeholder="Enter hip size">
+
+        <label for="height">Height (in inches):</label>
+        <input type="number" id="height" name="height" placeholder="Enter height">
+
+        <label for="hands">Height (in inches):</label>
+        <input type="number" id="hand" name="hand" placeholder="Enter shoulder size">
+
+        <div class="button-container">
+            <button type="button" onclick="saveMeasurements()">Save</button>
+            <button type="submit">Continue</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function loadSavedMeasurements() {
+        const savedMeasurements = JSON.parse(localStorage.getItem('measurements'));
+
+        if (savedMeasurements) {
+            document.getElementById('chest').value = savedMeasurements.chest || '';
+            document.getElementById('waist').value = savedMeasurements.waist || '';
+            document.getElementById('hips').value = savedMeasurements.hips || '';
+            document.getElementById('height').value = savedMeasurements.height || '';
+            document.getElementById('hand').value = savedMeasurements.hand|| '';
+        } else {
+            alert('No saved measurements found!');
+        }
+    }
+
+    function saveMeasurements() {
+        const measurements = {
+            chest: document.getElementById('chest').value,
+            waist: document.getElementById('waist').value,
+            hips: document.getElementById('hips').value,
+            height: document.getElementById('height').value
+        };
+
+        localStorage.setItem('measurements', JSON.stringify(measurements));
+        alert('Measurements saved successfully!');
+    }
+
+    document.getElementById('measurement-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        alert('Measurements submitted!');
+        window.location.href = 'tailor-select.html'; // Change this to your next page
+    });
+</script>
+
+</body>
+</html>

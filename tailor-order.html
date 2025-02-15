@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Received - Style Craft</title>
+    <style>
+        body {
+            font-family: Lora, serif;
+    background: url('pic.avif') no-repeat center center fixed; 
+    background-size: cover;
+    margin: 0;
+    padding: 20px; 
+        }
+        .header {
+            width: 100%;
+            padding: 1rem;
+            background-color: #ffffff; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            font-family: Lora, serif;
+        }
+        .header h1 {
+            margin: 0;
+            color: #6f1d1b; 
+            font-family: Lora, serif;
+        }
+        .order-count {
+            background-color: #F98866; 
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #ffffff; 
+            font-family: Lora, serif;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 0 auto;
+            font-family: Lora, serif;
+        }
+        .order-card {
+            background-color: #ffffff; 
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            font-family: Lora, serif;
+        }
+        .order-card h3 {
+            margin: 0 0 1rem 0;
+            color: #6f1d1b; 
+        }
+        .order-card p {
+            margin: 0 0 1rem 0;
+            color: #432818; 
+        }
+        .order-card button {
+            background-color: #F98866; 
+            border: none;
+            padding: 0.75rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%; 
+            color: #000000; 
+            font-family: Lora, serif;
+        }
+        .order-card button:hover {
+            opacity: 0.7;
+        }
+        .order-card button:active {
+            opacity: 0.5;
+        }
+        .order-card .chat-button {
+            background-color: #FFF2D7; 
+            margin-top: 0.5rem;
+        }
+        .order-card .chat-button:hover {
+            opacity: 0.7;
+        }
+        .order-card .chat-button:active {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Orders Received</h1>
+        <div class="order-count" id="orderCount">Orders: 0</div>
+    </div>
+    <div class="container" id="orderContainer">
+        <!-- Orders will be dynamically inserted here -->
+    </div>
+    <script>
+        const orders = [
+            { id: 1, customerName: 'Aarohi', details: 'Order details 1' },
+            { id: 2, customerName: 'Aanya', details: 'Order details 2' },
+            { id: 3, customerName: 'Bhavya', details: 'Order details 3' },
+            { id: 4, customerName: 'Charvi', details: 'Order details 4' },
+            { id: 5, customerName: 'Diya', details: 'Order details 5' },
+            { id: 6, customerName: 'Esha', details: 'Order details 6' },
+            { id: 7, customerName: 'Garima', details: 'Order details 7' },
+            { id: 8, customerName: 'Ishita', details: 'Order details 8' },
+            { id: 9, customerName: 'Jhanvi', details: 'Order details 9' },
+            { id: 10, customerName: 'Kavya', details: 'Order details 10' },
+            { id: 11, customerName: 'Lavanya', details: 'Order details 11' },
+            { id: 12, customerName: 'Meera', details: 'Order details 12' },
+            { id: 13, customerName: 'Nitya', details: 'Order details 13' },
+            { id: 14, customerName: 'Ojasvi', details: 'Order details 14' },
+            { id: 15, customerName: 'Pari', details: 'Order details 15' },
+            { id: 16, customerName: 'Riya', details: 'Order details 16' },
+            { id: 17, customerName: 'Shanaya', details: 'Order details 17' },
+            { id: 18, customerName: 'Tara', details: 'Order details 18' },
+            { id: 19, customerName: 'Urvi', details: 'Order details 19' },
+            { id: 20, customerName: 'Vanya', details: 'Order details 20' }
+        ];
+
+        let selectedOrderCount = 0;
+
+        function updateOrderCount() {
+            document.getElementById('orderCount').textContent = `Orders: ${selectedOrderCount}`;
+        }
+
+        function acceptOrder(orderId) {
+            const orderCard = document.getElementById(`order-${orderId}`);
+            const button = orderCard.querySelector('button.accept-button');
+
+            if (button.textContent === 'Accept') {
+                button.textContent = 'Accepted';
+                selectedOrderCount++;
+            } else {
+                button.textContent = 'Accept';
+                selectedOrderCount--;
+            }
+
+            updateOrderCount();
+        }
+
+        function createOrderCard(order) {
+            const orderCard = document.createElement('div');
+            orderCard.classList.add('order-card');
+            orderCard.id = `order-${order.id}`;
+
+            const orderTitle = document.createElement('h3');
+            orderTitle.textContent = order.customerName;
+
+            const orderDetails = document.createElement('p');
+            orderDetails.textContent = order.details;
+
+            const acceptButton = document.createElement('button');
+            acceptButton.textContent = 'Accept';
+            acceptButton.classList.add('accept-button');
+            acceptButton.onclick = () => acceptOrder(order.id);
+
+            const chatButton = document.createElement('button');
+            chatButton.textContent = 'Chat with Customer';
+            chatButton.classList.add('chat-button');
+
+            orderCard.appendChild(orderTitle);
+            orderCard.appendChild(orderDetails);
+            orderCard.appendChild(acceptButton);
+            orderCard.appendChild(chatButton);
+
+            return orderCard;
+        }
+
+        function populateOrders() {
+            const orderContainer = document.getElementById('orderContainer');
+            orders.forEach(order => {
+                const orderCard = createOrderCard(order);
+                orderContainer.appendChild(orderCard);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateOrders();
+        });
+    </script>
+</body>
+</html>

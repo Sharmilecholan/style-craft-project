@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleCraft - Customer Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lora', serif;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgb(58, 0, 0);
+            color: white;
+            position: fixed;
+            width: 100%;
+            height: 60px;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header .logo img {
+            height: 50px;
+        }
+
+        .nav-center {
+    display: flex;
+    gap: 30px; /* Increased gap for more space between items */
+    justify-content: center;
+    flex-grow: 1;
+}
+        .nav-center a {
+    color: white;
+    text-decoration: none;
+    gap: 30px; /* Increased gap for more space between items */
+    font-size: 1rem;
+    padding-bottom: 5px; /* Space for the underline */
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-center a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* Adjust to touch the bottom of the header */
+    width: 0;
+    height: 2px;
+    background-color: #ffd700;
+    transition: width 0.3s ease;
+}
+
+.nav-center a:hover {
+    color: #ffd700;
+}
+
+.nav-center a:hover::after {
+    width: 100%;
+}
+.login-link {
+    margin-right: 50px; /* Adjusted margin to bring it a bit to the left */
+}
+
+.login-link a {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #8B4513;
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-link a:hover {
+    background: #A0522D;
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+
+        /* Banner Section */
+        /* Banner Image with Shine Animation */
+/* Banner Video with Shine Animation */
+.banner {
+    width: 100%;
+    height: 60vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
+    transition: all 0.5s ease;
+    pointer-events: none;
+}
+
+.banner:hover::before {
+    left: 100%;
+    transition: all 0.5s ease;
+}
+
+
+
+        .banner h1 {
+            font-size: 3rem;
+            z-index: 2;
+            animation: fadeInDown 2s;
+        }
+
+        .banner p {
+            font-size: 1.5rem;
+            z-index: 2;
+            animation: fadeInUp 2s;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Upload Section */
+        .upload-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-section video {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -2;
+        }
+
+        .upload-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            z-index: -1;
+        }
+
+        .upload-content {
+            text-align: center;
+            animation: fadeIn 2s ease;
+        }
+
+        .upload-content h2 {
+            font-size: 3rem;
+            color: #4E342E;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .upload-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #8B4513;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, background 0.3s ease;
+            text-decoration: none;
+        }
+
+        .upload-button:hover {
+            background: #A0522D;
+            transform: scale(1.1);
+        }
+
+        /* About Us Section */
+        .about-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            background: #F5F5F5;
+        }
+
+        .about-section .about-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .about-section .about-image img {
+            width: 70%;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-section .about-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .about-section h2 {
+            font-size: 2.5rem;
+            color: #4E342E;
+            margin-bottom: 20px;
+        }
+
+        .about-section p {
+            font-size: 1.2rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #4E342E;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer a {
+            color: #f98866;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Sticky Header Adjustment */
+        body {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">
+            <img src="Stylecraft.png" alt="StyleCraft Logo">
+        </div>
+        
+        <nav class="nav-center">
+            <a href="#">Home</a>
+            <a href="#upload">Upload Fabric</a>
+            <a href="#about">About Us</a>
+            <a href="#orders">Track Orders</a>
+            <a href="#chat">Chat</a>
+        </nav>
+
+        <div class="login-link">
+            <a href="customer-login.html">Login</a>
+        </div>
+    </header>
+
+    <!-- Banner Section (Below Header) -->
+    <!-- Banner Section (Below Header) -->
+<section class="banner">
+    <video autoplay muted loop class="banner-video">
+        <source src="banner-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</section>
+
+
+    <!-- Upload Fabric Section -->
+    <section id="upload" class="upload-section">
+        <video autoplay muted loop>
+            <source src="background-video.mp4" type="video/mp4">
+        </video>
+        <div class="upload-content">
+            <h2>Upload Your Fabric</h2>
+            <a href="material-upload.html" class="upload-button">Upload Now</a>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="about-section">
+        <div class="about-image">
+            <img src="about-image.jpg" alt="About StyleCraft">
+        </div>
+        <div class="about-content">
+            <h2>About StyleCraft</h2>
+            <p>StyleCraft is a global platform connecting customers with talented tailors for custom-designed clothing. Our mission is to provide a seamless experience where users can upload their fabric, visualize unique designs, and collaborate with skilled tailors worldwide. At StyleCraft, we blend tradition with technology to bring your fashion dreams to life.</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Style Craft. All rights reserved.</p>
+        <p>Follow us on: 
+            <a href="#">Facebook</a> | 
+            <a href="#">Instagram</a> | 
+            <a href="#">Twitter</a>
+        </p>
+    </footer>
+</body>
+</html>

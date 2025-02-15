@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailor Sign-In - Style Craft</title>
+    <style>
+        body {
+            font-family: Lora, serif;
+            background: url('pic.avif') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: url('pinkk.avif') no-repeat center center/cover;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            font-family: Lora, serif;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #432818;
+            font-family: Lora, serif;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            width: 100%;
+            font-family: Lora, serif;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #432818;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: Lora, serif;
+        }
+        .form-group .password-container {
+            position: relative;
+            width: 100%;
+        }
+        .form-group .password-container input {
+            width: calc(100% - 2rem);
+            padding-right: 2rem;
+        }
+        .form-group .password-container .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 0.5rem;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6f1d1b;
+        }
+        .form-group button {
+            width: 100%;
+            font-family: Lora, serif;
+            padding: 0.75rem;
+            background-color: #F98866; /* Updated button color */
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .form-group button:hover {
+            background-color: #c87675;
+            box-shadow: 0 0 10px rgba(249, 136, 102, 0.8);
+        }
+        .form-group button:active {
+            background-color: #d7b7a4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tailor Sign-In</h2>
+        <form onsubmit="return handleSubmit(event, 'tailor-order.html')">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" required>
+            </div>
+            <div class="form-group">
+                <label for="company-number">Company Number</label>
+                <input type="text" id="company-number" name="adhaar-number" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required>
+                    <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleSubmit(event, redirectUrl) {
+            event.preventDefault();
+            window.location.href = redirectUrl;
+        }
+    </script>
+</body>
+</html>

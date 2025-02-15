@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleCraft Customer Login</title>
+    <style>
+        body {
+            background: url('pic.avif') no-repeat center center/cover;
+            background-size: cover;
+            font-family: Lora, serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background: url('pinkk.avif') no-repeat center center/cover;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 320px;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #000;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 85%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container .error-msg {
+            color: red;
+            font-size: 14px;
+        }
+        .login-container button {
+            background-color: #F98866;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .login-container button:hover {
+            background-color: #F98866;
+        }
+        .login-container a {
+            display: block;
+            margin-top: 15px;
+            color: #000;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Customer Login</h2>
+        <input type="text" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <p class="error-msg" id="error-msg"></p>
+        <button onclick="login()">Login</button>
+        <a href="customer-signin.html">New User? Sign Up</a>
+        <a href="customer-forgot-password.html">Forgot password? Click Here</a>
+    </div>
+
+    <script>
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            fetch('http://127.0.0.1:5000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(result => {
+                if (result.status === 200) {
+                    localStorage.setItem('access_token', result.body.access_token);
+                    alert('Login successful!');
+                    window.location.href = 'customer-home.html';
+                } else {
+                    errorMsg.textContent = result.body.message || 'Login failed. Incorrect Password.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMsg.textContent = 'An error occurred. Please try again later.';
+            });
+        }
+    </script>
+</body>
+</html>

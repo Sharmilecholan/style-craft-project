@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dress Visualization - Style Craft</title>
+    <style>
+body {
+    font-family: Lora, serif;
+    background: url('pinkk.avif') no-repeat center center fixed; 
+    background-size: cover;
+    margin: 0;
+    padding: 20px;
+}
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .model {
+            background-color: #ffffff; /* White */
+            padding: 0.5rem;
+            margin: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: calc(30% - 2rem);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .model canvas {
+            max-width: 100%;
+            max-height: 250px;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .select-button {
+            background-color: #F98866; /* Darker Brown */
+            font-family: Lora, serif;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: auto;
+            position: absolute;
+            bottom: 0;
+        }
+        .select-button:hover {
+            opacity: 0.8;
+        }
+        .select-button:active {
+            opacity: 0.6;
+        }
+        .fullscreen-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7); 
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .fullscreen-icon:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        @media (max-width: 768px) {
+            .model {
+                width: calc(45% - 2rem);
+            }
+        }
+        @media (max-width: 480px) {
+            .model {
+                width: 100%;
+                margin: 1rem 0;
+            }
+        }
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .fullscreen-image {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #99582A; 
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .close-button:hover {
+            opacity: 0.7;
+        }
+        .close-button:active {
+            opacity: 0.5;
+        }
+        .message {
+            background-color: #6F1D1B; 
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="message" id="message">Model selected!</div>
+    <div class="container" id="model-container">
+        <!-- Model divs will be appended here by JavaScript -->
+    </div>
+    <div class="fullscreen-overlay" id="fullscreen-overlay">
+        <canvas id="fullscreen-canvas" class="fullscreen-image"></canvas>
+        <button class="close-button" onclick="closeFullscreen()">X</button>
+    </div>
+    <script>
+        const baseDesigns = [
+            'https://i.ibb.co/bsnyYFs/Screenshot-2024-07-31-231127-removebg-preview.png',
+            'https://i.ibb.co/Q63q2w3/Screenshot-2024-07-31-230910-removebg-preview.png',
+            'https://i.ibb.co/w0Q3TsB/Screenshot-2024-07-31-230842-removebg-preview.png',
+            'https://i.ibb.co/71hMNH5/Screenshot-2024-07-31-230815-removebg-preview.png',
+            'https://i.ibb.co/J5Qdx0Y/Screenshot-2024-07-31-230754-removebg-preview.png',
+            'https://i.ibb.co/YBHhtS2/Screenshot-2024-07-31-230717-removebg-preview.png',
+            'https://i.ibb.co/72G7LKz/Screenshot-2024-07-31-230704-removebg-preview.png',
+            'https://i.ibb.co/pb2Y1s9/Screenshot-2024-07-31-230633-removebg-preview.png',
+            'https://i.ibb.co/kqC412P/Screenshot-2024-07-31-230620-removebg-preview.png',
+            'https://i.ibb.co/ZmGH5MZ/Screenshot-2024-07-31-230600-removebg-preview.png',
+            'https://i.ibb.co/f8tqH3v/Screenshot-2024-07-31-230545-removebg-preview.png',
+            'https://i.ibb.co/7XqxWdZ/Screenshot-2024-07-31-230526-removebg-preview.png',
+            'https://i.ibb.co/dWbT9nK/Screenshot-2024-07-31-230507-removebg-preview.png'
+        ];
+
+        const modelContainer = document.getElementById('model-container');
+        const fullscreenOverlay = document.getElementById('fullscreen-overlay');
+        const fullscreenCanvas = document.getElementById('fullscreen-canvas');
+        const message = document.getElementById('message');
+        const uploadedMaterial = localStorage.getItem('uploadedMaterial');
+
+        if (!uploadedMaterial) {
+            alert('No material uploaded.');
+            window.location.href = 'measurements.html'; // Redirect if no material is found
+        }
+
+        function selectModel(modelNumber) {
+            message.textContent = `Model ${modelNumber} selected!`;
+            message.style.display = 'block';
+
+            setTimeout(() => {
+                window.location.href = `measurements.html?model=${modelNumber}`;
+            }, 1500);
+        }
+
+        function openFullscreen(canvas) {
+            const ctx = fullscreenCanvas.getContext('2d');
+            fullscreenCanvas.width = canvas.width;
+            fullscreenCanvas.height = canvas.height;
+            ctx.drawImage(canvas, 0, 0);
+            fullscreenOverlay.style.display = 'flex';
+        }
+
+        function closeFullscreen() {
+            fullscreenOverlay.style.display = 'none';
+        }
+
+        function renderDesigns() {
+            baseDesigns.forEach((baseDesignUrl, index) => {
+                const modelDiv = document.createElement('div');
+                modelDiv.className = 'model';
+
+                const canvas = document.createElement('canvas');
+                canvas.id = `designCanvas${index + 1}`;
+                canvas.onclick = () => openFullscreen(canvas);
+
+                const fullscreenIcon = document.createElement('div');
+                fullscreenIcon.className = 'fullscreen-icon';
+                fullscreenIcon.innerHTML = '&#x26F6;'; // Fullscreen icon (⛶)
+                fullscreenIcon.onclick = (event) => {
+                    event.stopPropagation();
+                    openFullscreen(canvas);
+                };
+
+                const button = document.createElement('button');
+                button.className = 'select-button';
+                button.innerText = 'Select';
+                button.onclick = (event) => {
+                    event.stopPropagation(); // Prevent div click event
+                    selectModel(index + 1);
+                };
+
+                modelDiv.appendChild(fullscreenIcon);
+                modelDiv.appendChild(canvas);
+                modelDiv.appendChild(button);
+                modelContainer.appendChild(modelDiv);
+
+                const baseDesign = new Image();
+                baseDesign.onload = function () {
+                    const ctx = canvas.getContext('2d');
+                    const maxWidth = 200;
+                    const maxHeight = 250;
+
+                    const aspectRatio = baseDesign.width / baseDesign.height;
+                    if (baseDesign.width > maxWidth) {
+                        canvas.width = maxWidth;
+                        canvas.height = maxWidth / aspectRatio;
+                    } else if (baseDesign.height > maxHeight) {
+                        canvas.height = maxHeight;
+                        canvas.width = maxHeight * aspectRatio;
+                    } else {
+                        canvas.width = baseDesign.width;
+                        canvas.height = baseDesign.height;
+                    }
+
+                    ctx.drawImage(baseDesign, 0, 0, canvas.width, canvas.height);
+
+                    const textureImg = new Image();
+                    textureImg.onload = function () {
+                        ctx.globalCompositeOperation = 'source-atop';
+                        ctx.drawImage(textureImg, 0, 0, canvas.width, canvas.height);
+                        ctx.globalCompositeOperation = 'source-over';
+                    };
+                    textureImg.src = uploadedMaterial;
+                };
+                baseDesign.src = baseDesignUrl;
+            });
+        }
+
+        renderDesigns();
+    </script>
+</body>
+</html>

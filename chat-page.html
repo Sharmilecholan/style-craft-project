@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Style Craft</title>
+    <style>
+        body {
+            font-family: Lora, serif;
+            background: url('pic.avif') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            font-family: Lora, serif;
+            height: 100%;
+            max-width: 1200px;
+            background-color: #FFFFFF; 
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #00246B; 
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #FFF;
+            font-family: Lora, serif;
+        }
+        .messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: #F9F9F9; 
+            font-family: Lora, serif;
+        }
+        .message {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            max-width: 70%;
+            font-family: Lora, serif;
+        }
+        .message.customer {
+            background-color: #6F1D1B; 
+            color: #FFF;
+            align-self: flex-start;
+            font-family: Lora, serif;
+        }
+        .message.tailor {
+            background-color: #BB9457;
+            color: #432818; 
+            align-self: flex-end;
+            font-family: Lora, serif;
+        }
+        .input-container {
+            display: flex;
+            padding: 1rem;
+            font-family: Lora, serif;
+            border-top: 1px solid #ccc;
+            background-color: #FFFFFF; 
+        }
+        .input-container input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: Lora, serif;
+        }
+        .input-container button {
+            background-color: #00246B; 
+            color: #FFF;
+            font-family: Lora, serif;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            margin-left: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-container button:hover {
+            opacity: 0.8;
+        }
+        .input-container button:active {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Chat with Tailor</div>
+        <div class="messages" id="messages">
+            <!-- Messages will be appended here by JavaScript -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        let firstMessageSent = false;
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (message) {
+                appendMessage('customer', message);
+                input.value = '';
+                if (!firstMessageSent) {
+                    setTimeout(() => {
+                        appendMessage('tailor', "Heyy... how's your day, can you provide your measurements?");
+                    }, 1000);
+                    firstMessageSent = true;
+                }
+            }
+        }
+
+        function appendMessage(sender, message) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
